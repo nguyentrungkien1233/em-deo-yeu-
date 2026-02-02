@@ -5,17 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Popup Love Message</title>
   <style>
-    body { margin: 0; background-color: black; overflow: hidden; height: 100vh; width: 100vw; }
-    .popup { position: absolute; padding: 10px 20px; background-color: #F8C7DA; font-family: 'Comic Sans MS', cursive, sans-serif; font-weight: bold; font-size: 18px; color: white; border-radius: 8px; box-shadow: 0 0 10px pink; animation: fadeOut 8s ease forwards; pointer-events: none; }
-    @keyframes fadeOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.5); } }
-    .dialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #F8C7DA; padding: 20px; border-radius: 10px; font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 24px; color: white; text-align: center; box-shadow: 0 0 15px pink; z-index: 3000; cursor: pointer; }
-    .anniversary-msg { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); font-family: 'Comic Sans MS', cursive, sans-serif; font-size: 45px; color: #ff4d6d; text-align: center; z-index: 2500; transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 100%; opacity: 0; pointer-events: none; }
-    .anniversary-msg.show { transform: translate(-50%, -50%) scale(1); opacity: 1; text-shadow: 0 0 20px rgba(255, 77, 109, 0.8); }
-    .floating-photo { position: fixed; width: 150px; height: auto; border: 4px solid white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; pointer-events: none; opacity: 0; animation: floatAround 12s linear forwards; }
-    @keyframes floatAround { 0% { transform: translateY(110vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; } }
-    .rainbow-text { background: linear-gradient(to right, #ff4d6d, #ffb3c1, #ffffff, #ffb3c1, #ff4d6d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% auto; animation: shine 3s linear infinite; font-weight: bold; }
+    body {
+      margin: 0;
+      background-color: black;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .popup {
+      position: absolute;
+      padding: 10px 20px;
+      background-color: #F8C7DA;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-weight: bold;
+      font-size: 18px;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px pink;
+      animation: fadeOut 8s ease forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+
+    .dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #F8C7DA;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 24px;
+      color: white;
+      text-align: center;
+      box-shadow: 0 0 15px pink;
+      z-index: 3000;
+      cursor: pointer;
+    }
+
+    .anniversary-msg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 45px;
+      color: #ff4d6d;
+      text-align: center;
+      z-index: 2500;
+      transition: all 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .anniversary-msg.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      text-shadow: 0 0 20px rgba(255, 77, 109, 0.8);
+    }
+
+    /* Hiệu ứng ảnh bay lãng mạn */
+    .floating-photo {
+      position: fixed;
+      width: 150px; /* Kích thước ảnh bay */
+      height: auto;
+      border: 4px solid white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      pointer-events: none;
+      opacity: 0;
+      animation: floatAround 12s linear forwards;
+    }
+
+    @keyframes floatAround {
+      0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
+    .rainbow-text {
+      background: linear-gradient(to right, #ff4d6d, #ffb3c1, #ffffff, #ffb3c1, #ff4d6d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% auto;
+      animation: shine 3s linear infinite;
+      font-weight: bold;
+    }
+
     @keyframes shine { to { background-position: 200% center; } }
-    @media screen and (max-width: 600px) { .anniversary-msg { font-size: 32px; } .floating-photo { width: 100px; } }
+
+    @media screen and (max-width: 600px) {
+      .anniversary-msg { font-size: 32px; }
+      .floating-photo { width: 100px; }
+    }
   </style>
 </head>
 <body>
@@ -30,6 +121,7 @@
   <audio id="backgroundMusic" src="music.mp3" loop></audio>
 
 <script>
+  // DANH SÁCH ẢNH CỦA BẠN (Chỉ để tên file, không để C:\...)
   const photoFiles = [
     "z7494301043917_eff74a89ec2df631793295fb7f7ace0e.jpg",
     "z7494418523600_223eebc1c88837983e0af807b4c09a09.jpg",
@@ -44,7 +136,7 @@
     "z7494467735178_9c45c91fd4b5e4c1cf60cc37e954da8e.jpg"
   ];
 
-  const messages = ["Anh yêu em dẹo nhắmmm ❤️"];
+  const messages = ["Anh yêu em dẹo nhắmmm ❤"];
   const dialog = document.getElementById("startDialog");
   const audio = document.getElementById("backgroundMusic");
   const annivMsg = document.getElementById("anniversaryMsg");
@@ -55,9 +147,8 @@
     popup.textContent = messages[0];
     const x = Math.random() * (window.innerWidth - 120);
     const y = Math.random() * (window.innerHeight - 50);
-    // Đã sửa dấu backtick ở đây
-    popup.style.left = `${x}px`;
-    popup.style.top = `${y}px`;
+    popup.style.left = ${x}px;
+    popup.style.top = ${y}px;
     document.body.appendChild(popup);
     setTimeout(() => popup.remove(), 8000);
   }
@@ -77,23 +168,30 @@
 
   function showAnniversary() {
     annivMsg.classList.add("show");
+    // Bắt đầu cho ảnh bay lên liên tục
     setInterval(createFloatingPhoto, 2500);
+    // Bắt đầu tạo tim bay nhỏ
     setInterval(createFloatingHeart, 400);
   }
 
   function createFloatingPhoto() {
     const img = document.createElement("img");
-    // Thêm ./ để gọi ảnh từ thư mục gốc
-    img.src = "./" + photoFiles[Math.floor(Math.random() * photoFiles.length)];
+    // Lấy ngẫu nhiên 1 trong 4 ảnh
+    img.src = photoFiles[Math.floor(Math.random() * photoFiles.length)];
     img.className = "floating-photo";
+    
+    // Vị trí ngang ngẫu nhiên
     img.style.left = Math.random() * (window.innerWidth - 150) + "px";
+    
     document.body.appendChild(img);
+
+    // Xóa ảnh sau khi bay xong để nhẹ trình duyệt
     setTimeout(() => img.remove(), 12000);
   }
 
   function createFloatingHeart() {
     const heart = document.createElement("div");
-    heart.innerHTML = "❤️"; // Thêm lại trái tim cho bạn
+    heart.innerHTML = "❤️";
     heart.style.position = "fixed";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.bottom = "-5vh";
@@ -104,8 +202,7 @@
     heart.style.transition = "transform 6s linear, opacity 6s linear";
     document.body.appendChild(heart);
     setTimeout(() => {
-      // Đã sửa dấu backtick ở đây
-      heart.style.transform = `translateY(-110vh) rotate(${Math.random() * 360}deg)`;
+      heart.style.transform = translateY(-110vh) rotate(${Math.random() * 360}deg);
       heart.style.opacity = "0";
     }, 100);
     setTimeout(() => heart.remove(), 7000);
@@ -113,8 +210,7 @@
 
   document.addEventListener("click", function () {
     dialog.style.display = "none";
-    // Ép phát nhạc sau khi click
-    audio.play().catch(e => console.log("Lỗi nhạc:", e));
+    audio.play().catch(e => console.log("Music play failed", e));
     startPopups(100);
   }, { once: true });
 </script>
